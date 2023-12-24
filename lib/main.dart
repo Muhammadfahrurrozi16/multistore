@@ -1,6 +1,8 @@
 // import 'package:app_fic/pages/splash/splash_page.dart';
 import 'package:app_fic/bloc/Login/login_bloc.dart';
 import 'package:app_fic/bloc/Logout/logout_bloc.dart';
+import 'package:app_fic/bloc/category/category_bloc.dart';
+import 'package:app_fic/bloc/product/product_bloc.dart';
 import 'package:app_fic/pages/Data/DataResources/auth_local_datasources.dart';
 import 'package:app_fic/pages/dashboard/dashboard.dart';
 import 'package:app_fic/utilis/light_themes.dart';
@@ -28,6 +30,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LogoutBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ProductBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CategoryBloc(),
         ),
       ],
       child: MaterialApp(
