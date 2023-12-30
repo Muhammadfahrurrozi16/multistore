@@ -1,5 +1,7 @@
 // import 'package:flutter/foundation.dart';
+import 'package:app_fic/pages/product/product_detail.dart';
 import 'package:app_fic/utilis/images.dart';
+import 'package:app_fic/utilis/price_ext.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utilis/color_resource.dart';
@@ -18,7 +20,11 @@ class ProductItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) {
+          return ProductDetail(product: product);
+        }));
+      },
       child: Container(
         height: Dimensions.cardHeight,
         margin: const EdgeInsets.all(5),
@@ -102,7 +108,7 @@ class ProductItemWidget extends StatelessWidget {
                         height: 2,
                       ),
                       Text(
-                        '${product.price}',
+                        '${product.price}'.formatPrice(),
                         style: titilliumBold.copyWith(
                           color: ColorResources.getPrimary(context)
                         ),
