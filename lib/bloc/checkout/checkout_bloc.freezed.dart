@@ -208,11 +208,11 @@ class __$$AddCartImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? product = freezed,
+    Object? product = null,
     Object? quatity = null,
   }) {
     return _then(_$AddCartImpl(
-      freezed == product
+      null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
@@ -244,13 +244,12 @@ class _$AddCartImpl implements _AddCart {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AddCartImpl &&
-            const DeepCollectionEquality().equals(other.product, product) &&
+            (identical(other.product, product) || other.product == product) &&
             (identical(other.quatity, quatity) || other.quatity == quatity));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(product), quatity);
+  int get hashCode => Object.hash(runtimeType, product, quatity);
 
   @JsonKey(ignore: true)
   @override
@@ -358,11 +357,11 @@ class __$$RemoveCartImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? product = freezed,
+    Object? product = null,
     Object? quatity = null,
   }) {
     return _then(_$RemoveCartImpl(
-      freezed == product
+      null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
@@ -394,13 +393,12 @@ class _$RemoveCartImpl implements _RemoveCart {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RemoveCartImpl &&
-            const DeepCollectionEquality().equals(other.product, product) &&
+            (identical(other.product, product) || other.product == product) &&
             (identical(other.quatity, quatity) || other.quatity == quatity));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(product), quatity);
+  int get hashCode => Object.hash(runtimeType, product, quatity);
 
   @JsonKey(ignore: true)
   @override
@@ -490,42 +488,43 @@ abstract class _RemoveCart implements CheckoutEvent {
 
 /// @nodoc
 mixin _$CheckoutState {
-  List<ProductQuatity> get products => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(List<ProductQuatity> products) loaded,
+    required TResult Function() loading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(List<ProductQuatity> products)? loaded,
+    TResult? Function()? loading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<ProductQuatity> products)? loaded,
+    TResult Function()? loading,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Loading value) loading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Loading value)? loading,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Loading value)? loading,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $CheckoutStateCopyWith<CheckoutState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -534,8 +533,6 @@ abstract class $CheckoutStateCopyWith<$Res> {
   factory $CheckoutStateCopyWith(
           CheckoutState value, $Res Function(CheckoutState) then) =
       _$CheckoutStateCopyWithImpl<$Res, CheckoutState>;
-  @useResult
-  $Res call({List<ProductQuatity> products});
 }
 
 /// @nodoc
@@ -547,28 +544,13 @@ class _$CheckoutStateCopyWithImpl<$Res, $Val extends CheckoutState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? products = null,
-  }) {
-    return _then(_value.copyWith(
-      products: null == products
-          ? _value.products
-          : products // ignore: cast_nullable_to_non_nullable
-              as List<ProductQuatity>,
-    ) as $Val);
-  }
 }
 
 /// @nodoc
-abstract class _$$LoadedImplCopyWith<$Res>
-    implements $CheckoutStateCopyWith<$Res> {
+abstract class _$$LoadedImplCopyWith<$Res> {
   factory _$$LoadedImplCopyWith(
           _$LoadedImpl value, $Res Function(_$LoadedImpl) then) =
       __$$LoadedImplCopyWithImpl<$Res>;
-  @override
   @useResult
   $Res call({List<ProductQuatity> products});
 }
@@ -636,6 +618,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(List<ProductQuatity> products) loaded,
+    required TResult Function() loading,
   }) {
     return loaded(products);
   }
@@ -644,6 +627,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(List<ProductQuatity> products)? loaded,
+    TResult? Function()? loading,
   }) {
     return loaded?.call(products);
   }
@@ -652,6 +636,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(List<ProductQuatity> products)? loaded,
+    TResult Function()? loading,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -664,6 +649,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Loading value) loading,
   }) {
     return loaded(this);
   }
@@ -672,6 +658,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Loading value)? loading,
   }) {
     return loaded?.call(this);
   }
@@ -680,6 +667,7 @@ class _$LoadedImpl implements _Loaded {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Loaded value)? loaded,
+    TResult Function(_Loading value)? loading,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -692,10 +680,110 @@ class _$LoadedImpl implements _Loaded {
 abstract class _Loaded implements CheckoutState {
   const factory _Loaded(final List<ProductQuatity> products) = _$LoadedImpl;
 
-  @override
   List<ProductQuatity> get products;
-  @override
   @JsonKey(ignore: true)
   _$$LoadedImplCopyWith<_$LoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$LoadingImplCopyWith<$Res> {
+  factory _$$LoadingImplCopyWith(
+          _$LoadingImpl value, $Res Function(_$LoadingImpl) then) =
+      __$$LoadingImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$LoadingImplCopyWithImpl<$Res>
+    extends _$CheckoutStateCopyWithImpl<$Res, _$LoadingImpl>
+    implements _$$LoadingImplCopyWith<$Res> {
+  __$$LoadingImplCopyWithImpl(
+      _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
+      : super(_value, _then);
+}
+
+/// @nodoc
+
+class _$LoadingImpl implements _Loading {
+  const _$LoadingImpl();
+
+  @override
+  String toString() {
+    return 'CheckoutState.loading()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$LoadingImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(List<ProductQuatity> products) loaded,
+    required TResult Function() loading,
+  }) {
+    return loading();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(List<ProductQuatity> products)? loaded,
+    TResult? Function()? loading,
+  }) {
+    return loading?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(List<ProductQuatity> products)? loaded,
+    TResult Function()? loading,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_Loading value) loading,
+  }) {
+    return loading(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_Loading value)? loading,
+  }) {
+    return loading?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_Loading value)? loading,
+    required TResult orElse(),
+  }) {
+    if (loading != null) {
+      return loading(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _Loading implements CheckoutState {
+  const factory _Loading() = _$LoadingImpl;
 }

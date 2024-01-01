@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:app_fic/pages/cart/cart.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -58,7 +59,8 @@ class _BottomCartState extends State<BottomCart> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const Cartpage() ));
                     },
                     child: Image.asset(Images.cartArrowDownImage,
                     color: ColorResources.getPrimary(context))
@@ -77,6 +79,9 @@ class _BottomCartState extends State<BottomCart> {
                       child: BlocBuilder<CheckoutBloc, CheckoutState>(
                         builder: (context, state) {
                           return state.map(
+                            loading: (value) {
+                              return CircularProgressIndicator();
+                            },
                             loaded: (value){
                               int totalQty = 0;
                               value.products.forEach(
