@@ -1,4 +1,5 @@
 // import 'package:app_fic/pages/splash/splash_page.dart';
+import 'package:app_fic/bloc/Banners/banners_bloc.dart';
 import 'package:app_fic/bloc/Login/login_bloc.dart';
 import 'package:app_fic/bloc/Logout/logout_bloc.dart';
 import 'package:app_fic/bloc/category/category_bloc.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => OrderBloc(),
         ),
+        BlocProvider(
+          create: (context) => BannersBloc(),
+        )
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

@@ -1,5 +1,6 @@
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../bloc/checkout/checkout_bloc.dart';
 import '../../../utilis/color_resource.dart';
@@ -7,7 +8,7 @@ import '../../../utilis/custom_theme.dart';
 import '../../../utilis/dimensions.dart';
 import '../../../utilis/images.dart';
 import '../../../utilis/price_ext.dart';
-import '../../product/product_detail.dart';
+// import '../../product/product_detail.dart';
 
 class CartWidget extends StatelessWidget {
   final ProductQuatity productQuatity;
@@ -19,7 +20,9 @@ class CartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        context.read<CheckoutBloc>().add(CheckoutEvent.removeCart(productQuatity.product, productQuatity.quatity));
+      },
       child: Container(
         margin: const EdgeInsets.only(top: Dimensions.paddingSizeSmall),
         padding: const EdgeInsets.all(Dimensions.paddingSizeSmall),

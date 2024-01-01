@@ -1,7 +1,9 @@
 // import 'package:flutter/foundation.dart';
+import 'package:app_fic/pages/cart/cart.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import '../../bloc/category/category_bloc.dart';
+import '../../bloc/checkout/checkout_bloc.dart';
 import '../../bloc/product/product_bloc.dart';
 import '../../utilis/color_resource.dart';
 import '../../utilis/custom_theme.dart';
@@ -25,101 +27,126 @@ class SilverDlegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-    BuildContext context,double shrinkOffset, bool overlapsContent
-  ){
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return child;
   }
 
-  @override 
+  @override
   double get maxExtent => 70;
 
   @override
   double get minExtent => 70;
 
   @override
-  bool shouldRebuild(SilverDlegate oldDelegate){
+  bool shouldRebuild(SilverDlegate oldDelegate) {
     return oldDelegate.maxExtent != 70 ||
-      oldDelegate.minExtent != 70 ||
-      child != oldDelegate.child;
+        oldDelegate.minExtent != 70 ||
+        child != oldDelegate.child;
   }
 }
 
 class _HomePageState extends State<HomePage> {
   final ScrollController _scrollController = ScrollController();
 
-  Future<void>_loadData(bool reload) async {}
+  Future<void> _loadData(bool reload) async {}
 
   void passData(int index, String title) {
     index = index;
     title = title;
   }
+
   bool singleVendor = false;
   @override
-  void initState(){
+  void initState() {
     context.read<ProductBloc>().add(const ProductEvent.getAll());
     context.read<CategoryBloc>().add(const CategoryEvent.getCategory());
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorResources.getHomeBg(context),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Stack(
-          children: [
-            CustomScrollView(
-              controller: _scrollController,
-              slivers: [
-                SliverAppBar(
-                  floating: true,
-                  elevation: 0,
-                  centerTitle: false,
-                  automaticallyImplyLeading: false,
-                  backgroundColor: Theme.of(context).highlightColor,
-                  title: Image.asset(Images.logoWithNameImage, height: 35),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
-                      child: IconButton(
-                        onPressed: (){},
-                        icon: Stack(clipBehavior: Clip.none, children: [
-                          Image.asset(
-                            Images.cartArrowDownImage,
-                            height: Dimensions.iconSizeDefault,
-                            width: Dimensions.iconSizeDefault,
-                            color: ColorResources.getPrimary(context),
-                          ),
-                          Positioned(
-                            top: -4,
-                            right: -4,
-                            child: CircleAvatar(
-                              radius: 7,
-                              backgroundColor: ColorResources.red,
-                              child: Text(
-                                '10',
-                                style: titilliumSemiBold.copyWith(
-                                  color: ColorResources.white,
-                                  fontSize: Dimensions.fontSizeExtraSmall,
-                                ),
-                              ),
+          child: Stack(
+        children: [
+          CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              SliverAppBar(
+                floating: true,
+                elevation: 0,
+                centerTitle: false,
+                automaticallyImplyLeading: false,
+                backgroundColor: Theme.of(context).highlightColor,
+                title: Image.asset(Images.logoWithNameImage, height: 35),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 12.0),
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const Cartpage()));
+                      },
+                      icon: Stack(clipBehavior: Clip.none, children: [
+                        Image.asset(
+                          Images.cartArrowDownImage,
+                          height: Dimensions.iconSizeDefault,
+                          width: Dimensions.iconSizeDefault,
+                          color: ColorResources.getPrimary(context),
+                        ),
+                        Positioned(
+                          top: -4,
+                          right: -4,
+                          child: CircleAvatar(
+                            radius: 7,
+                            backgroundColor: ColorResources.red,
+                            child: BlocBuilder<CheckoutBloc, CheckoutState>(
+                              builder: (context, state) {
+                                return state.maybeWhen(
+                                  orElse: (){
+                                    return Text(
+                                      '10',
+                                      style: titilliumSemiBold.copyWith(
+                                        color: ColorResources.white,
+                                        fontSize: Dimensions.fontSizeExtraSmall,
+                                      ),
+                                    );
+                                },
+                                loaded: (products) {
+                                  int totalQty = 0;
+                                  products.forEach((element) { 
+                                    totalQty += element.quatity;
+                                  },
+                                  );
+                                  return Text(
+                                    '$totalQty',
+                                    style: titilliumSemiBold.copyWith(
+                                      color: ColorResources.white,
+                                      fontSize: Dimensions.fontSizeExtraSmall,
+                                    ),
+                                  );
+                                },
+                                );// 
+                              },
                             ),
-                            )
-                        ]),
-                      ),
+                          ),
+                        )
+                      ]),
                     ),
-                  ],
-                ),
-                SliverPersistentHeader(
+                  ),
+                ],
+              ),
+              SliverPersistentHeader(
                   pinned: true,
                   delegate: SilverDlegate(
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
+                      child: InkWell(
+                    onTap: () {},
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
                           horizontal: Dimensions.homePagePadding,
-                          vertical: Dimensions.paddingSizeSmall
-                        ),
+                          vertical: Dimensions.paddingSizeSmall),
                       color: ColorResources.getHomeBg(context),
                       alignment: Alignment.center,
                       child: Container(
@@ -135,153 +162,150 @@ class _HomePageState extends State<HomePage> {
                           color: Theme.of(context).cardColor,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey[200]!,
-                              spreadRadius: 1,
-                              blurRadius: 1
-                            )
+                                color: Colors.grey[200]!,
+                                spreadRadius: 1,
+                                blurRadius: 1)
                           ],
                           borderRadius: BorderRadius.circular(
-                            Dimensions.paddingSizeExtraSmall
-                          ),
+                              Dimensions.paddingSizeExtraSmall),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text('Search',
-                            style: robotoRegular.copyWith(
-                              color: Theme.of(context).hintColor
-                            )),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(
-                                    Dimensions.paddingSizeExtraSmall
-                                  )
-                                )
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('Search',
+                                  style: robotoRegular.copyWith(
+                                      color: Theme.of(context).hintColor)),
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor,
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(
+                                            Dimensions.paddingSizeExtraSmall))),
+                                child: Icon(Icons.search,
+                                    color: Theme.of(context).cardColor,
+                                    size: Dimensions.iconSizeSmall),
                               ),
-                              child: Icon(Icons.search,
-                                color: Theme.of(context).cardColor,
-                                size: Dimensions.iconSizeSmall),
-                            ),
-                          ]),
+                            ]),
                       ),
-                      ),
-                    ))),
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(
+                    ),
+                  ))),
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(
                       Dimensions.homePagePadding,
                       Dimensions.paddingSizeSmall,
                       Dimensions.paddingSizeDefault,
                       Dimensions.paddingSizeSmall),
-                    child: Column(
-                      children: [
-                        const Bannerwidget(),
-                        const SizedBox(height: Dimensions.homePagePadding),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
+                  child: Column(
+                    children: [
+                      const Bannerwidget(),
+                      const SizedBox(height: Dimensions.homePagePadding),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
                             horizontal: Dimensions.paddingSizeExtraExtraSmall,
-                            vertical: Dimensions.paddingSizeExtraSmall
-                          ),
-                          child: TitleRow(
-                            title: 'Category',
-                            onTap: (){},
-                            ), 
-                          ),
-                          const SizedBox(height: Dimensions.paddingSizeSmall),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: Dimensions.homePagePadding),
-                            child: CategoryWidget(),
+                            vertical: Dimensions.paddingSizeExtraSmall),
+                        child: TitleRow(
+                          title: 'Category',
+                          onTap: () {},
                         ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(
+                      ),
+                      const SizedBox(height: Dimensions.paddingSizeSmall),
+                      const Padding(
+                        padding:
+                            EdgeInsets.only(bottom: Dimensions.homePagePadding),
+                        child: CategoryWidget(),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(
                             horizontal: Dimensions.paddingSizeExtraSmall,
-                            vertical:  Dimensions.paddingSizeExtraSmall
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(child: Text('Product', style: titleHeader)),
-                            ]),
-                          ),
-                          const SizedBox(height: Dimensions.homePagePadding),
-                      ],
-                    ),
+                            vertical: Dimensions.paddingSizeExtraSmall),
+                        child: Row(children: [
+                          Expanded(child: Text('Product', style: titleHeader)),
+                        ]),
+                      ),
+                      const SizedBox(height: Dimensions.homePagePadding),
+                    ],
                   ),
                 ),
-                BlocBuilder<ProductBloc, ProductState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      orElse: (){
-                        return SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverGrid(
-                            delegate: SliverChildBuilderDelegate((BuildContext context,int index) {
+              ),
+              BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    orElse: () {
+                      return SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverGrid(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
                               return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             },
                             childCount: 1,
-                          ), gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 1,
                             mainAxisSpacing: 10.0,
                             crossAxisSpacing: 10.0,
                             childAspectRatio: 1.5 / 2,
-                            ),
                           ),
-                        );
-                      },
-                      error: (message) {
-                        return SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverGrid(
-                            delegate: SliverChildBuilderDelegate((
-                              BuildContext context,int index) {
-                                return Center(
-                                  child: Text(message),
-                                );
-                              },
-                              childCount: 1,
-                            ), 
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 1,
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 10.0,
-                              childAspectRatio: 1.5/2,
-                            ),
+                        ),
+                      );
+                    },
+                    error: (message) {
+                      return SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverGrid(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return Center(
+                                child: Text(message),
+                              );
+                            },
+                            childCount: 1,
                           ),
-                        );
-                      },
-                      loaded: (model) {
-                        return SliverPadding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          sliver: SliverGrid(
-                            delegate: SliverChildBuilderDelegate((
-                              BuildContext context, int index) {
-                                return ProductItemWidget(
-                                  product: model.data![index],
-                                  );
-                              },
-                              childCount: model.data!.length,
-                            ), 
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 10.0,
-                              crossAxisSpacing: 10.0,
-                              childAspectRatio: 1.5/2,
-                            ),
-                          ), 
-                        );
-                      },
-                    );
-                  },
-                )
-              ],
-            )
-          ],
-        )),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 1,
+                            mainAxisSpacing: 10.0,
+                            crossAxisSpacing: 10.0,
+                            childAspectRatio: 1.5 / 2,
+                          ),
+                        ),
+                      );
+                    },
+                    loaded: (model) {
+                      return SliverPadding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        sliver: SliverGrid(
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return ProductItemWidget(
+                                product: model.data![index],
+                              );
+                            },
+                            childCount: model.data!.length,
+                          ),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 10.0,
+                            crossAxisSpacing: 10.0,
+                            childAspectRatio: 1.5 / 2,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              )
+            ],
+          )
+        ],
+      )),
     );
   }
 }

@@ -9,7 +9,7 @@ class CheckoutState with _$CheckoutState {
 
 class ProductQuatity {
   final Product product;
-  final int quatity;
+  late final int quatity;
   ProductQuatity({
     required this.product,
     required this.quatity,
